@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sign In — IP Course Finder</title>
+<title>Sign In — Intuition Process</title>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -62,14 +62,10 @@
   }
 
   .logo {
-    width: 60px; height: 60px;
-    background: linear-gradient(145deg, #f0a080, #e8784a);
-    border-radius: 16px;
     margin: 0 auto 22px;
     display: flex; align-items: center; justify-content: center;
-    font-size: 1.7rem;
-    box-shadow: 0 4px 14px rgba(232,120,74,.3);
   }
+  .logo img { height: 52px; width: auto; }
 
   h1 { font-size: 1.35rem; font-weight: 700; color: #3d2c28; margin-bottom: 5px; }
   .subtitle { font-size: .87rem; color: #9a7d76; margin-bottom: 30px; }
@@ -115,9 +111,9 @@
 <body>
 <div class="blob"></div>
 <div class="card">
-  <div class="logo">🌟</div>
-  <h1>IP Course Finder</h1>
-  <p class="subtitle">Art of Living · Intuition Process</p>
+  <div class="logo"><img src="https://instituteofai.ai/wp-content/uploads/2025/11/iai_logo_black_text-scaled.webp" alt="Institute of Absolute Intelligence" /></div>
+  <h1>Intuition Process</h1>
+  <p class="subtitle">Institute of Absolute Intelligence</p>
   {% if error %}
     <div class="alert">{{ error }}</div>
   {% endif %}
