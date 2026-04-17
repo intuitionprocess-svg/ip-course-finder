@@ -1,56 +1,22 @@
 from flask import (Flask, jsonify, request, render_template,
-                   redirect, url_for, session, flash)
-from itsdangerous import URLSafeTimedSerializer, SignatureExpired, BadSignature
+                   redirect, url_for, session)
 import requests
 import re
 import os
-import smtplib
-from email.mime.text import MIMEText
 from datetime import date, timedelta
 
 app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY", "dev-secret-change-in-production")
 
-# ── Auth config (set these as env vars in production) ─────────────────────
-GMAIL_USER     = os.environ.get("GMAIL_USER", "")          # sending Gmail address
-GMAIL_APP_PASS = os.environ.get("GMAIL_APP_PASSWORD", "")  # Gmail App Password
-APP_URL        = os.environ.get("APP_URL", "http://localhost:5050")
-
-APPROVED_EMAILS = {
-    e.strip().lower()
-    for e in os.environ.get("APPROVED_EMAILS", "").split(",")
-    if e.strip()
-}
-
-_signer = URLSafeTimedSerializer(app.secret_key)
-
-
-def _send_magic_link(to_email: str, token: str):
-    link = f"{APP_URL}/verify?token={token}"
-    body = f"""Hello,
-
-Click the link below to access the Intuition Process Course Finder.
-This link expires in 24 hours.
-
-{link}
-
-If you didn't request this, ignore this email.
-"""
-    msg = MIMEText(body)
-    msg["Subject"] = "Your login link — IP Course Finder"
-    msg["From"]    = GMAIL_USER
-    msg["To"]      = to_email
-
-    with smtplib.SMTP_SSL("smtp.gmail.com", 465) as smtp:
-        smtp.login(GMAIL_USER, GMAIL_APP_PASS)
-        smtp.sendmail(GMAIL_USER, to_email, msg.as_string())
+# ── Auth config ────────────────────────────────────────────────────────────
+ACCESS_PASSWORD = os.environ.get("ACCESS_PASSWORD", "")
 
 
 def _login_required(f):
     from functools import wraps
     @wraps(f)
     def decorated(*args, **kwargs):
-        if not session.get("email"):
+        if not session.get("logged_in"):
             return redirect(url_for("login"))
         return f(*args, **kwargs)
     return decorated
@@ -60,44 +26,18 @@ def _login_required(f):
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
-    if session.get("email"):
+    if session.get("logged_in"):
         return redirect(url_for("index"))
 
     error = None
-    sent  = False
-
     if request.method == "POST":
-        email = request.form.get("email", "").strip().lower()
-        if email not in APPROVED_EMAILS:
-            error = "This email is not on the approved list."
-        elif not GMAIL_USER or not GMAIL_APP_PASS:
-            error = "Email service not configured. Contact the admin."
-        else:
-            try:
-                token = _signer.dumps(email, salt="magic-login")
-                _send_magic_link(email, token)
-                sent = True
-            except Exception as e:
-                error = f"Could not send email: {e}"
+        pwd = request.form.get("password", "")
+        if pwd == ACCESS_PASSWORD:
+            session["logged_in"] = True
+            return redirect(url_for("index"))
+        error = "Incorrect password. Please try again."
 
-    return render_template("login.html", error=error, sent=sent)
-
-
-@app.route("/verify")
-def verify():
-    token = request.args.get("token", "")
-    try:
-        email = _signer.loads(token, salt="magic-login", max_age=86400)
-        if email.lower() not in APPROVED_EMAILS:
-            return render_template("login.html", error="Access revoked.", sent=False)
-        session["email"] = email
-        return redirect(url_for("index"))
-    except SignatureExpired:
-        return render_template("login.html",
-                               error="Link expired. Please request a new one.", sent=False)
-    except BadSignature:
-        return render_template("login.html",
-                               error="Invalid link.", sent=False)
+    return render_template("login.html", error=error)
 
 
 @app.route("/logout")

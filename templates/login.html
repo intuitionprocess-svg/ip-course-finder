@@ -20,61 +20,41 @@
     box-shadow: 0 4px 24px rgba(0,0,0,.09);
     padding: 40px 36px;
     width: 100%;
-    max-width: 400px;
+    max-width: 380px;
     text-align: center;
   }
   .logo {
-    width: 56px;
-    height: 56px;
+    width: 56px; height: 56px;
     background: linear-gradient(135deg, #e35e1b, #f5a623);
     border-radius: 14px;
     margin: 0 auto 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display: flex; align-items: center; justify-content: center;
     font-size: 1.6rem;
   }
   h1 { font-size: 1.3rem; font-weight: 700; color: #2d2d2d; margin-bottom: 6px; }
   .subtitle { font-size: .88rem; color: #7a6f67; margin-bottom: 28px; }
-
   .alert {
-    padding: 10px 14px;
-    border-radius: 7px;
-    font-size: .85rem;
-    margin-bottom: 18px;
-    text-align: left;
+    padding: 10px 14px; border-radius: 7px; font-size: .85rem;
+    margin-bottom: 18px; text-align: left;
+    background: #fef2f2; color: #991b1b; border: 1px solid #fecaca;
   }
-  .alert-error   { background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; }
-  .alert-success { background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; }
-
-  label { display: block; text-align: left; font-size: .78rem; font-weight: 700;
-          text-transform: uppercase; letter-spacing: .5px; color: #7a6f67; margin-bottom: 6px; }
-  input[type="email"] {
-    width: 100%;
-    border: 1px solid #e8ddd4;
-    border-radius: 7px;
-    padding: 10px 13px;
-    font-size: .95rem;
-    color: #2d2d2d;
-    outline: none;
-    transition: border-color .15s;
-    margin-bottom: 16px;
+  label {
+    display: block; text-align: left; font-size: .78rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: .5px; color: #7a6f67; margin-bottom: 6px;
   }
-  input[type="email"]:focus { border-color: #e35e1b; }
+  input[type="password"] {
+    width: 100%; border: 1px solid #e8ddd4; border-radius: 7px;
+    padding: 10px 13px; font-size: .95rem; color: #2d2d2d;
+    outline: none; transition: border-color .15s; margin-bottom: 16px;
+  }
+  input[type="password"]:focus { border-color: #e35e1b; }
   button {
-    width: 100%;
-    padding: 11px;
+    width: 100%; padding: 11px;
     background: linear-gradient(135deg, #e35e1b, #f5a623);
-    color: white;
-    border: none;
-    border-radius: 7px;
-    font-size: .95rem;
-    font-weight: 700;
-    cursor: pointer;
-    transition: opacity .15s;
+    color: white; border: none; border-radius: 7px;
+    font-size: .95rem; font-weight: 700; cursor: pointer; transition: opacity .15s;
   }
   button:hover { opacity: .88; }
-  .note { font-size: .78rem; color: #7a6f67; margin-top: 18px; }
 </style>
 </head>
 <body>
@@ -82,23 +62,14 @@
   <div class="logo">🌟</div>
   <h1>IP Course Finder</h1>
   <p class="subtitle">Art of Living · Intuition Process</p>
-
-  {% if sent %}
-    <div class="alert alert-success">
-      ✅ Check your inbox — we sent a login link to your email.
-    </div>
-    <p class="note">The link expires in 24 hours. Check your spam folder if you don't see it.</p>
-  {% else %}
-    {% if error %}
-      <div class="alert alert-error">{{ error }}</div>
-    {% endif %}
-    <form method="POST">
-      <label for="email">Your email address</label>
-      <input type="email" id="email" name="email" placeholder="you@example.com" required autofocus />
-      <button type="submit">Send login link</button>
-    </form>
-    <p class="note">Only approved teachers can sign in. Contact your coordinator if you need access.</p>
+  {% if error %}
+    <div class="alert">{{ error }}</div>
   {% endif %}
+  <form method="POST">
+    <label for="password">Password</label>
+    <input type="password" id="password" name="password" placeholder="Enter password" required autofocus />
+    <button type="submit">Sign In</button>
+  </form>
 </div>
 </body>
 </html>
