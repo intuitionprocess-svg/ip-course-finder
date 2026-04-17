@@ -261,11 +261,10 @@ def get_courses():
     far_future = (today + timedelta(days=365 * 15)).strftime("%Y-%m-%d")
     from_date = request.args.get("from_date", today.strftime("%Y-%m-%d"))
 
-    params = {
+    base_params = {
         "country": "us",
         "language": "en-us",
         "extend_to_limit": "1",
-        "start_date_from": from_date,
         "start_date_to": far_future,
         "field_childrens": "true",
         "offset": "1",
@@ -273,19 +272,35 @@ def get_courses():
         "ctype": _YOUTH_CTYPES,
     }
 
+    all_courses = []
+    next_from = from_date
     try:
-        resp = requests.get(
-            "https://unity.artofliving.org/csapi/courses",
-            params=params,
-            headers=HEADERS,
-            timeout=20,
-        )
-        resp.raise_for_status()
-        data = resp.json()
+        # Paginate: API caps at 100 results; fetch again from the last date if more exist
+        while True:
+            params = {**base_params, "start_date_from": next_from}
+            resp = requests.get(
+                "https://unity.artofliving.org/csapi/courses",
+                params=params,
+                headers=HEADERS,
+                timeout=20,
+            )
+            resp.raise_for_status()
+            data = resp.json()
+            batch = data.get("courses", [])
+            if not batch:
+                break
+            all_courses.extend(batch)
+            total = data.get("total", 0)
+            if len(all_courses) >= total or len(batch) < 100:
+                break
+            # Advance the from_date to the day after the last result's start date
+            last_date = max(c.get("start_date", "")[:10] for c in batch)
+            from datetime import date as _date, timedelta as _td
+            next_from = (
+                _date.fromisoformat(last_date) + _td(days=1)
+            ).strftime("%Y-%m-%d")
     except Exception as e:
         return jsonify({"error": str(e)}), 502
-
-    all_courses = data.get("courses", [])
 
     # Keep only the four Intuition Process programs
     courses = [c for c in all_courses if c.get("ctype", "") in IP_CTYPES]
