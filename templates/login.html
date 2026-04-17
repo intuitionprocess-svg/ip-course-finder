@@ -11,64 +11,90 @@
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     min-height: 100vh;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     background: #fdf4ef;
     overflow: hidden;
     position: relative;
+    text-align: center;
+    padding: 40px 20px;
   }
 
   /* Watercolor blobs */
-  body::before, body::after, .blob {
+  body::before {
     content: '';
     position: fixed;
     border-radius: 50%;
-    filter: blur(60px);
+    filter: blur(80px);
     pointer-events: none;
     z-index: 0;
-  }
-  body::before {
-    width: 520px; height: 520px;
-    background: radial-gradient(circle, #f8c4b4 0%, transparent 70%);
-    top: -120px; left: -120px;
-    opacity: .75;
-  }
-  body::after {
-    width: 460px; height: 460px;
-    background: radial-gradient(circle, #fbd4b8 0%, transparent 70%);
-    bottom: -100px; right: -100px;
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, #f8c4b4 0%, transparent 65%);
+    top: -180px; left: -160px;
     opacity: .7;
   }
-  .blob {
-    width: 380px; height: 380px;
-    background: radial-gradient(circle, #fce8e0 0%, transparent 70%);
-    top: 40%; left: 55%;
-    opacity: .6;
+  body::after {
+    content: '';
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(80px);
+    pointer-events: none;
+    z-index: 0;
+    width: 520px; height: 520px;
+    background: radial-gradient(circle, #fce4d6 0%, transparent 65%);
+    bottom: -140px; right: -140px;
+    opacity: .65;
+  }
+  .blob-mid {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(70px);
+    pointer-events: none;
+    z-index: 0;
+    width: 420px; height: 420px;
+    background: radial-gradient(circle, #fdeee8 0%, transparent 70%);
+    top: 35%; left: 50%;
+    transform: translateX(-50%);
+    opacity: .55;
   }
 
-  .card {
+  .content {
     position: relative;
     z-index: 1;
-    background: rgba(255,255,255,.82);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255,255,255,.7);
-    border-radius: 20px;
-    box-shadow: 0 8px 32px rgba(200,120,80,.12);
-    padding: 44px 38px;
+    max-width: 560px;
     width: 100%;
-    max-width: 380px;
-    text-align: center;
   }
 
   .logo {
-    margin: 0 auto 22px;
+    margin: 0 auto 18px;
     display: flex; align-items: center; justify-content: center;
   }
-  .logo img { height: 52px; width: auto; }
+  .logo img { height: 44px; width: auto; }
 
-  h1 { font-size: 1.35rem; font-weight: 700; color: #3d2c28; margin-bottom: 2px; }
-  .subtitle { font-size: 1.05rem; font-weight: 400; color: #b8907e; margin-bottom: 30px; }
+  .tagline {
+    font-size: .92rem;
+    font-style: italic;
+    color: #b8907e;
+    margin-bottom: 32px;
+    line-height: 1.5;
+  }
+
+  h1 {
+    font-size: 2.6rem;
+    font-weight: 700;
+    color: #3d2c28;
+    line-height: 1.2;
+    margin-bottom: 16px;
+    letter-spacing: -.5px;
+  }
+
+  .sub {
+    font-size: 1rem;
+    color: #a08880;
+    margin-bottom: 36px;
+    line-height: 1.5;
+  }
 
   .alert {
     padding: 10px 14px; border-radius: 9px; font-size: .84rem;
@@ -76,52 +102,89 @@
     background: #fff0ee; color: #a03020; border: 1px solid #f8c8c0;
   }
 
-  label {
-    display: block; text-align: left; font-size: .75rem; font-weight: 700;
-    text-transform: uppercase; letter-spacing: .6px; color: #9a7d76; margin-bottom: 6px;
+  .form-row {
+    display: flex;
+    gap: 0;
+    max-width: 340px;
+    margin: 0 auto 48px;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
   }
+
   input[type="password"] {
     width: 100%;
     border: 1.5px solid #f0ddd8;
-    border-radius: 10px;
-    padding: 11px 14px;
+    border-radius: 30px;
+    padding: 13px 22px;
     font-size: .95rem;
     color: #3d2c28;
-    background: rgba(255,255,255,.8);
+    background: rgba(255,255,255,.85);
     outline: none;
     transition: border-color .15s;
-    margin-bottom: 18px;
+    text-align: center;
   }
   input[type="password"]:focus { border-color: #e8784a; }
   input[type="password"]::placeholder { color: #c4a89e; }
 
   button {
-    width: 100%; padding: 12px;
-    background: linear-gradient(135deg, #f0a080 0%, #e8784a 100%);
-    color: white; border: none; border-radius: 10px;
+    width: 100%;
+    padding: 13px 36px;
+    background: linear-gradient(135deg, #f0a868 0%, #e8784a 100%);
+    color: white; border: none; border-radius: 30px;
     font-size: .95rem; font-weight: 700; cursor: pointer;
     letter-spacing: .3px;
-    box-shadow: 0 4px 14px rgba(232,120,74,.35);
+    box-shadow: 0 4px 18px rgba(232,120,74,.4);
     transition: opacity .15s, transform .1s;
   }
   button:hover  { opacity: .9; }
   button:active { transform: scale(.98); }
+
+  .badges {
+    display: flex;
+    justify-content: center;
+    gap: 36px;
+    flex-wrap: wrap;
+  }
+  .badge {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: .85rem;
+    color: #a08880;
+  }
+  .badge-icon {
+    font-size: 1.1rem;
+  }
 </style>
 </head>
 <body>
-<div class="blob"></div>
-<div class="card">
-  <div class="logo"><img src="https://instituteofai.ai/wp-content/uploads/2025/11/iai_logo_black_text-scaled.webp" alt="Institute of Absolute Intelligence" /></div>
-  <h1>Intuition Process</h1>
-  <p class="subtitle">Course Finder</p>
+<div class="blob-mid"></div>
+<div class="content">
+  <div class="logo">
+    <img src="https://instituteofai.ai/wp-content/uploads/2025/11/iai_logo_black_text-scaled.webp" alt="Institute of Absolute Intelligence" />
+  </div>
+
+  <p class="tagline">Thank you for attending the<br>Intuition Process Intro Session</p>
+
+  <h1>Let's Continue Your<br>Intuition Process Journey</h1>
+
+  <p class="sub">Find upcoming courses near you and<br>connect with your local teacher</p>
+
   {% if error %}
     <div class="alert">{{ error }}</div>
   {% endif %}
-  <form method="POST">
-    <label for="password">Password</label>
+
+  <form method="POST" class="form-row">
     <input type="password" id="password" name="password" placeholder="Enter password" required autofocus />
-    <button type="submit">Sign In</button>
+    <button type="submit">Let's Begin!</button>
   </form>
+
+  <div class="badges">
+    <div class="badge"><span class="badge-icon">🌿</span> Calm mind</div>
+    <div class="badge"><span class="badge-icon">✨</span> Clear decisions</div>
+    <div class="badge"><span class="badge-icon">🌸</span> Natural confidence</div>
+  </div>
 </div>
 </body>
 </html>
