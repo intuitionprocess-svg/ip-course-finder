@@ -228,13 +228,9 @@ _YOUTH_CTYPES = (
 # The four IP programs we actually want to display
 IP_CTYPES = {
     "1517975": "Intuition Process Juniors (ages 5–7)",
-    "1518350": "Intuition Process Juniors (ages 5–7)",
     "1517983": "Intuition Process Kids (ages 8–12)",
-    "1518351": "Intuition Process Kids (ages 8–12)",
     "1517984": "Intuition Process Teens (ages 13–17)",
-    "1535152": "Intuition Process Teens (ages 13–17)",
     "1565382": "Intuition Process Level 2",
-    "565382":  "Intuition Process Level 2",
 }
 
 HEADERS = {
